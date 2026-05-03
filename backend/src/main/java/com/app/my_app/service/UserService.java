@@ -53,8 +53,23 @@ public class UserService  implements UserDetailsService {
 
     public void update(final Long id, final UserDTO userDTO) {
         final User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//        mapToEntity(userDTO, user);
 
+        // Kiểm tra ràng buộc duy nhất: username, email, phone (không được trùng với tài khoản người khác)
+        if (userDTO.getUsername() != null && !userDTO.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(userDTO.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username này đã được sử dụng!");
+        }
+        if (userDTO.getEmail() != null && !userDTO.getEmail().equals(user.getEmail()) && userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email này đã được sử dụng!");
+        }
+        if (userDTO.getPhone() != null && !userDTO.getPhone().isEmpty() && !userDTO.getPhone().equals(user.getPhone()) && userRepository.existsByPhone(userDTO.getPhone())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số điện thoại này đã được sử dụng!");
+        }
+
+        // Cập nhật thông tin
+        if (userDTO.getUsername() != null) user.setUsername(userDTO.getUsername());
+        if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
+        if (userDTO.getFirstname() != null) user.setFirstname(userDTO.getFirstname());
+        if (userDTO.getLastname() != null) user.setLastname(userDTO.getLastname());
         user.setAddress(userDTO.getAddress());
         user.setPhone(userDTO.getPhone());
 
@@ -62,23 +77,31 @@ public class UserService  implements UserDetailsService {
     }
 
     public User registerUser(UserDTO userDto) {
-//        userRepository
-//                .findOneByUsername(userDto.getUsername().toLowerCase())
-//                .ifPresent(existingUser -> {
-//
-//                    return null;
-//                });
-
         User user = new User();
-        user.setUsername(userDto.getUsername().toLowerCase());
-        user.setEmail(userDto.getEmail().toLowerCase(Locale.ROOT));
+        
+        // Nhận ID đã được tính toán từ Controller
+        if (userDto.getId() != null) {
+            user.setId(userDto.getId());
+        }
+
+        // Ánh xạ các thông tin cơ bản
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        
+        // Mã hóa mật khẩu trước khi lưu vào Database để chức năng Login hoạt động đúng
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        
+        // BỔ SUNG LƯU CÁC MỤC NHẬP MỚI VÀO DATABASE
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
-        String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
-        user.setPassword(encryptedPassword);
-        System.out.println(user);
-        userRepository.save(user);
-        return user;
+        user.setPhone(userDto.getPhone());
+        user.setAddress(userDto.getAddress());
+        
+        // Cấp quyền mặc định cho tài khoản đăng ký mới
+        user.setRole("ROLE_USER");
+        
+        // Lưu xuống Database
+        return userRepository.save(user);
     }
 
     public void delete(final Long id) {

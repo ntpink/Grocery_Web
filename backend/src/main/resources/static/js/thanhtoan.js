@@ -6,13 +6,15 @@ function matHang(c) {
             <span>
                 <span>${c?.quantity}</span>
                 <span>x</span>
-                <span>${c.product?.name}</span> | <span>1lb</span>
+                <span>${c.product?.name}</span>
             </span>
         </div>
         <span class="font-bold">${numberToVnd(c?.quantity * c?.product?.price)}</span>
     </div>
     `;
 }
+
+let totalAmount = 0; // Biến lưu tổng tiền để gửi khi đặt hàng
 
 // Hàm tải giỏ hàng và tính tổng tiền
 async function loadCart() {
@@ -29,11 +31,12 @@ async function loadCart() {
   });
 
   console.log("Tổng cộng:", total);
+  totalAmount = total + 15000;
   
   // Hiển thị các loại tiền
   document.getElementById("tongTienHang").innerHTML = numberToVnd(total);
   document.getElementById("phiVanChuyen").innerHTML = numberToVnd(15000);
-  document.getElementById("tongTien").innerHTML = numberToVnd(total + 15000);
+  document.getElementById("tongTien").innerHTML = numberToVnd(totalAmount);
 }
 
 // Hàm thực hiện đặt hàng
@@ -42,7 +45,8 @@ async function makeOrder() {
   const orderData = {
     phone: document.getElementById("sdt").value,
     address: document.getElementById("diachi").value,
-    // Nếu API của bạn cần thêm thông tin giao hàng, hãy lấy từ biến window.selectedDeliveryTime
+    total: totalAmount, // Gửi kèm tổng tiền (bao gồm phí ship)
+    deliveryTime: window.selectedDeliveryTime || '90_phut' // Gửi thêm thời gian giao hàng
   };
 
   const res = await createOrderService(orderData); // Truyền dữ liệu nếu service hỗ trợ

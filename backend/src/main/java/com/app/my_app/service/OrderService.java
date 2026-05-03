@@ -76,11 +76,21 @@ public class OrderService {
      * @return Order
      */
     @Transactional
-    public Order makeOrder() {
+    public Order makeOrder(com.app.my_app.rest.OrderResource.OrderRequestDTO orderData) {
         // Tạo order mới
         Order order = new Order();
-        order.setAddress(authService.getCurrentUser().getAddress());
-        order.setPhone(authService.getCurrentUser().getPhone());
+        
+        if (orderData != null && orderData.getAddress() != null && !orderData.getAddress().isEmpty()) {
+            order.setAddress(orderData.getAddress());
+        } else {
+            order.setAddress(authService.getCurrentUser().getAddress());
+        }
+        
+        if (orderData != null && orderData.getPhone() != null && !orderData.getPhone().isEmpty()) {
+            order.setPhone(orderData.getPhone());
+        } else {
+            order.setPhone(authService.getCurrentUser().getPhone());
+        }
         order.setUsers(authService.getCurrentUser());
         Long totalPrice = 0L;
         order.setTotal(totalPrice);
@@ -103,7 +113,13 @@ public class OrderService {
             orderItems.add(orderItemSave);
             totalPrice += o.getPrice() * o.getQuantity();
         }
-        updateOrder.setTotal(totalPrice);
+        
+        if (orderData != null && orderData.getTotal() != null) {
+            updateOrder.setTotal(orderData.getTotal().longValue());
+        } else {
+            updateOrder.setTotal(totalPrice);
+        }
+        
         Set<OrderItem> os = new HashSet<>(orderItems);
         updateOrder.setOrderItems(os);
         // xóa
@@ -116,6 +132,36 @@ public class OrderService {
         final Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         mapToEntity(orderDTO, order);
+        orderRepository.save(order);
+    }
+
+    public void updateStatus(final Long id, final Long statusId) {
+        if (statusId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "statusId is required");
+        }
+        final Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
+        
+        OrderStatus status = orderStatusRepository.findById(statusId).orElse(null);
+        
+        if (status == null) {
+            status = new OrderStatus();
+            status.setId(statusId);
+            if (statusId.equals(1L)) status.setName("Chờ xác nhận");
+            else if (statusId.equals(2L)) status.setName("Đang chuẩn bị hàng");
+            else if (statusId.equals(3L)) status.setName("Đang giao hàng");
+            else if (statusId.equals(4L)) status.setName("Giao thành công");
+            else if (statusId.equals(5L)) status.setName("Đã hủy");
+            else status.setName("Trạng thái " + statusId);
+            
+            try {
+                status = orderStatusRepository.save(status);
+            } catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Bảng OrderStatus trong DB đang bị trống ID=" + statusId);
+            }
+        }
+        
+        order.setStatus(status);
         orderRepository.save(order);
     }
 

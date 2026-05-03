@@ -5,6 +5,7 @@ import com.app.my_app.domain.User;
 import com.app.my_app.model.JwtRequest;
 import com.app.my_app.model.JwtResponse;
 import com.app.my_app.model.UserDTO;
+import com.app.my_app.repos.UserRepository;
 import com.app.my_app.service.AuthService;
 import com.app.my_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class AuthResource {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-
+    @Autowired
+    private UserRepository userRepository;
 
 
     /**
@@ -45,14 +46,32 @@ public class AuthResource {
      * @param userDto The userDto object is the object that is passed in the request body.
      */
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody UserDTO userDto) {
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDto) {
 
         if (isPasswordLengthInvalid(userDto.getPassword())) {
-            return;
+            return ResponseEntity.badRequest().body("Mật khẩu phải dài hơn 4 ký tự");
         }
+        
+        if (userDto.getUsername() != null && userRepository.existsByUsername(userDto.getUsername())) {
+            return ResponseEntity.badRequest().body("Username này đã được sử dụng!");
+        }
+        
+        if (userDto.getEmail() != null && userRepository.existsByEmail(userDto.getEmail())) {
+            return ResponseEntity.badRequest().body("Email này đã được sử dụng!");
+        }
+        
+        if (userDto.getPhone() != null && !userDto.getPhone().isEmpty() && userRepository.existsByPhone(userDto.getPhone())) {
+            return ResponseEntity.badRequest().body("Số điện thoại này đã được sử dụng!");
+        }
+
+        // Tự động tính ID mới (+1 so với ID cuối cùng trong DB)
+        Long nextId = userRepository.findMaxId() + 1;
+        userDto.setId(nextId);
+
         User user = userService.registerUser(userDto);
         System.out.println(userDto);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body("Đăng ký thành công!");
     }
 
 
@@ -72,8 +91,9 @@ public class AuthResource {
                 .loadUserByUsername(authenticationRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
+        final String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponse(token, role));
     }
 
 

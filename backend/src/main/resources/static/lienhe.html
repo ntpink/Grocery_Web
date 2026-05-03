@@ -13,58 +13,7 @@
 <body>
 
   <div class="than">
-    <div class="tieu-de">
-      <div class="bieu-tuong">
-        <a href="/"><img src="https://cdn-icons-png.flaticon.com/512/4163/4163765.png" alt="thuc pham"></a>
-        <!-- Menu ds các loại mặt hàng -->
-        <div class="danhmuc">
-          <button class="danhmuc-nut" onclick="hienThiDanhMuc()">Danh mục</button>
-          <div class="danhmuc-noidung" id="danhmuc-nd">
-            <a href="#">Nước uống</a>
-            <a href="#">Rau củ</a>
-            <a href="#">Thịt và cá</a>
-            <a href="#">Trứng và sữa</a>
-            <a href="#">Bánh</a>
-            <a href="#">Gia vị</a>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="tim-kiem">
-        <form>
-          <div>
-            <input placeholder="Tìm kiếm sản phẩm bạn muốn tại đây" value="" />
-          </div>
-        </form>
-      </div>
-      <ul class="dieu-huong">
-        <li>
-          <a class="" href="/donhang.html">Đơn hàng</a>
-        </li>
-        <li>
-          <a class="" href="/lienhe.html">Liên hệ</a>
-        </li>
-        <div class="dieu-huong-phai">
-          <div class="bieu_tuong_gio_hang">
-            <a href="giohang.html">
-              <img class="dieuhuong"
-                src="https://thumbs.dreamstime.com/b/shopping-cart-icon-trolley-icon-shopping-cart-icon-trolley-icon-vector-illustration-isolated-white-background-163727286.jpg"
-                alt="">
-              <div id="gioHangSL" class="giohang-soluong"></div>
-            </a>
-          </div>
-          <div class="nut-dang-nhap">
-            <a href="dangnhap.html">
-              <button>
-                <img class="dieuhuong" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                  alt="">
-              </button>
-            </a>
-          </div>
-        </div>
-
-      </ul>
+    <div class="tieu-de" include-html="/components/header.html">
     </div>
     <!-- noi dung -->
     <div class="noi_dung">
@@ -142,6 +91,7 @@
 
   <script src="js/service.js"></script>
   <script src="js/script.js"></script>
+  <script src="js/chung.js"></script>
   
 </body>
 

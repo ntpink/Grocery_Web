@@ -4,9 +4,15 @@ function chuyenTrang(url) {
 
 async function load() {
   user = await fetchUser();
-  document.getElementById("gioHangSL").innerText = user.userCartItems.length;
-  document.getElementById("username").innerText = user.username;
-  console.log('user :>> ', user);
+  if (user) {
+    const gioHangEl = document.getElementById("gioHangSL");
+    if (gioHangEl) gioHangEl.innerText = user.userCartItems ? user.userCartItems.length : 0;
+
+    const usernameEl = document.getElementById("username");
+    if (usernameEl) usernameEl.innerText = user.username;
+
+    console.log('user :>> ', user);
+  }
 }
 load();
 

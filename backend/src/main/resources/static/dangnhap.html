@@ -12,6 +12,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        /* Khắc phục lỗi form đăng ký bị lẹm */
+        .khung.active {
+            height: 750px !important; /* Mở rộng chiều cao khung khi chuyển sang tab Đăng ký */
+            transition: height 0.3s ease; /* Thêm hiệu ứng chuyển đổi mượt mà */
+        }
+        
+        .bieumau.dangky {
+            overflow-y: auto; /* Bật thanh cuộn dọc */
+            max-height: 100%;
+            padding-right: 8px;
+            padding-bottom: 20px;
+        }
+        .bieumau.dangky::-webkit-scrollbar {
+            width: 6px;
+        }
+        .bieumau.dangky::-webkit-scrollbar-thumb {
+            background: #7b5be4; /* Đổi màu thanh cuộn cho khớp với theme */
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
 <body>
@@ -53,7 +74,7 @@
                     </div>
                     <div class="loi" id="loi_emaildangky"></div>
                     <div class="truongnhap">
-                        <input type="text" id="tendangky" placeholder="Nhập tên của bạn">
+                        <input type="text" id="tendangky" placeholder="Nhập username của bạn">
                     </div>
                     <div class="loi" id="loi_tendangky"></div>
                     <div class="truongnhap">
@@ -65,6 +86,22 @@
                             placeholder="Nhập lại mật khẩu của bạn">
                     </div>
                     <div class="loi" id="loi_mat_khaudangkynhaplai"></div>
+                    <div class="truongnhap">
+                        <input type="text" id="hodem" placeholder="Nhập họ đệm của bạn">
+                    </div>
+                    <div class="loi" id="loi_hodem"></div>
+                    <div class="truongnhap">
+                        <input type="text" id="ten" placeholder="Nhập tên của bạn">
+                    </div>
+                    <div class="loi" id="loi_ten"></div>
+                    <div class="truongnhap">
+                        <input type="text" id="sodienthoai" placeholder="Nhập số điện thoại của bạn">
+                    </div>
+                    <div class="loi" id="loi_sodienthoai"></div>
+                    <div class="truongnhap">
+                        <input type="text" id="diachi" placeholder="Nhập địa chỉ của bạn">
+                    </div>
+                    <div class="loi" id="loi_diachi"></div>
 
                     <div class="truongnhap button">
                         <input type="submit" value="Đăng ký">

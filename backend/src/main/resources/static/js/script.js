@@ -98,7 +98,7 @@ function filterCategory(category) {
     filteredProducts = allProducts;
   } else {
     filteredProducts = allProducts.filter(
-      (p) => p.category?.name === category
+      (p) => p.category && p.category.name && p.category.name.trim().toLowerCase() === category.trim().toLowerCase()
     );
   }
   goPage(1);

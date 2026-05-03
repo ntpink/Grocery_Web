@@ -17,8 +17,8 @@ public class ProductDTO {
 
     @Size(max = 255)
     private String description;
-
-    @Size(max = 255)
+    
+    @Size(max = 2000) 
     private String image;
 
 

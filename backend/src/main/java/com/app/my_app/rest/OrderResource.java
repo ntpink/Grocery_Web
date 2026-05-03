@@ -45,10 +45,39 @@ public class OrderResource {
         return new ResponseEntity<>(orderService.create(orderDTO), HttpStatus.CREATED);
     }
 
+    public static class OrderRequestDTO {
+        private String phone;
+        private String address;
+        private Double total;
+        private String deliveryTime;
+
+        public String getPhone() { return phone; }
+        public void setPhone(String phone) { this.phone = phone; }
+        public String getAddress() { return address; }
+        public void setAddress(String address) { this.address = address; }
+        public Double getTotal() { return total; }
+        public void setTotal(Double total) { this.total = total; }
+        public String getDeliveryTime() { return deliveryTime; }
+        public void setDeliveryTime(String deliveryTime) { this.deliveryTime = deliveryTime; }
+    }
 
     @PostMapping("/create")
-    public Order createOrder() {
-        return orderService.makeOrder();
+    public Order createOrder(@RequestBody(required = false) OrderRequestDTO orderData) {
+        // Truyền orderData nhận được xuống cho Service xử lý
+        return orderService.makeOrder(orderData);
+    }
+
+    public static class StatusRequestDTO {
+        private Long statusId;
+        public Long getStatusId() { return statusId; }
+        public void setStatusId(Long statusId) { this.statusId = statusId; }
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> updateOrderStatus(@PathVariable final Long id,
+            @RequestBody StatusRequestDTO payload) {
+        orderService.updateStatus(id, payload.getStatusId());
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")

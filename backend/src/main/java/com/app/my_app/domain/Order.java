@@ -48,6 +48,10 @@ public class Order {
     @JoinColumn(name = "status_id")
     private OrderStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "shipper_id")
+    private Shipper shipper;
+
     @OneToMany(mappedBy = "order")
     @JsonManagedReference
     @JsonIgnoreProperties("order")

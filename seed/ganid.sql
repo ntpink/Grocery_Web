@@ -15,3 +15,12 @@ UPDATE product SET category_id = 5 WHERE id IN (14,15,16,47,48,49,50,51,59,70,71
 
 -- Gia vị
 UPDATE product SET category_id = 6 WHERE id IN (64,65,66,67,68,69,63);
+
+-- Bổ sung Trái cây vào nhóm Rau củ (Category_id = 2)
+UPDATE product SET category_id = 2 WHERE id IN (20, 21, 26);
+
+-- Bổ sung Mì gói và Khoai tây đông lạnh vào nhóm Bánh/Đồ ăn nhanh (Category_id = 5)
+UPDATE product SET category_id = 5 WHERE id IN (56, 57, 58, 60, 61, 62);
+
+-- Cập nhật các sản phẩm còn lại vào nhóm 7
+UPDATE product SET category_id = 7 WHERE id IN (13, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 124);

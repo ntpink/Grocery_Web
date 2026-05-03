@@ -15,6 +15,7 @@ import java.io.Serializable;
 public class JwtResponse implements Serializable {
 
     private String token;
+    private String role;
 
 
 }
