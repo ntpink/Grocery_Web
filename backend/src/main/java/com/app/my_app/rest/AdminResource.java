@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminResource {
 
     private final UserService userService;
@@ -51,43 +52,36 @@ public class AdminResource {
         this.cartItemService = cartItemService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> users() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/products")
     public ResponseEntity<List<Product>> products() {
         return ResponseEntity.ok(productService.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> categories() {
         return ResponseEntity.ok(categoryService.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> orders() {
         return ResponseEntity.ok(orderService.findAllAdmin());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/order-items")
     public ResponseEntity<List<OrderItem>> orderItems() {
         return ResponseEntity.ok(orderItemService.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/order-status")
     public ResponseEntity<List<OrderStatus>> orderStatus() {
         return ResponseEntity.ok(orderStatusService.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/cart-items")
     public ResponseEntity<List<CartItem>> cartItems() {
         return ResponseEntity.ok(cartItemService.findAllAdmin());
