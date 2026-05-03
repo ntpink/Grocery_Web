@@ -123,8 +123,9 @@ async function textChange(id) {
 }
 
 async function xoa(id) {
-  const res = await removeCartItemService(id);
-  console.log(res);
-  // loadCart();
+  await removeCartItemService(id);
+  listCart = listCart.filter(item => item.id !== id);
+  document.querySelector(`.sanpham${id}`)?.remove();
   updateTotal();
+  await load(); // gọi lại fetchUser để cập nhật badge
 }
