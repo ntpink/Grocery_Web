@@ -16,9 +16,14 @@
   </div>
 </div>
 <div class="tim-kiem">
-  <form>
+  <!-- Bỏ thẻ form hoặc thêm onsubmit để tránh load lại trang -->
+  <form onsubmit="event.preventDefault();"> 
     <div>
-      <input placeholder="Tìm kiếm sản phẩm bạn muốn tại đây" value="" />
+      <input 
+        id="input-search"
+        placeholder="Tìm kiếm sản phẩm bạn muốn tại đây" 
+        oninput="handleSearch(event)" 
+      />
     </div>
   </form>
 </div>

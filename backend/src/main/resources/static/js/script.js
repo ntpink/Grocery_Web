@@ -116,3 +116,16 @@ async function loadProduct() {
 }
 
 loadProduct();
+
+function handleSearch(event) {
+    const keyword = event.target.value.toLowerCase().trim();
+    
+    // Lọc sản phẩm từ danh sách gốc allProducts
+    filteredProducts = allProducts.filter(product => 
+        product.name.toLowerCase().includes(keyword)
+    );
+
+    // Cập nhật lại giao diện
+    page = 1; // Reset về trang đầu
+    goPage(1); 
+}
