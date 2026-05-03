@@ -20,6 +20,9 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

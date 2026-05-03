@@ -47,6 +47,9 @@ public class User {
     @Column
     private String phone;
 
+    @Column(nullable = false)
+    private String role;
+
     @OneToMany(mappedBy = "user")
     private Set<CartItem> userCartItems;
 

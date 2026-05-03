@@ -50,6 +50,10 @@ public class CartItemService {
         return cartItemRepository.findAllByUserId(authService.getCurrentUserId());
     }
 
+    public List<CartItem> findAllAdmin() {
+        return cartItemRepository.findAll();
+    }
+
     /**
      * Nếu mặt hàng trong giỏ hàng tồn tại, hãy trả lại, nếu không, hãy ném 404.
      *

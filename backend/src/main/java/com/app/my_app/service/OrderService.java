@@ -59,6 +59,10 @@ public class OrderService {
         return orderRepository.findAllByUsersId(authService.getCurrentUserId());
     }
 
+    public List<Order> findAllAdmin() {
+        return orderRepository.findAll();
+    }
+
     public Order get(final Long id) {
         return orderRepository.findById(id).orElse(null);
     }

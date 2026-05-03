@@ -76,6 +76,7 @@ public class UserService  implements UserDetailsService {
         user.setLastname(userDto.getLastname());
         String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
         user.setPassword(encryptedPassword);
+        user.setRole("USER");
         System.out.println(user);
         userRepository.save(user);
         return user;
